@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  emailAccounts EmailAccount[]
+  campaigns     Campaign[]
+}
+
+model EmailAccount {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  displayName  String?
+  smtpHost     String
+  smtpPort     Int
+  smtpUser     String
+  smtpPassword String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  campaigns Campaign[]
+}
+
+model Campaign {
+  id             Int      @id @default(autoincrement())
+  name           String
+  subject        String
+  body           String
+  status         String   @default("DRAFT")
+  scheduledAt    DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userId         Int
+  user           User         @relation(fields: [userId], references: [id])
+  emailAccountId Int
+  emailAccount   EmailAccount @relation(fields: [emailAccountId], references: [id])
+
+  emails ScheduledEmail[]
+}
+
+model ScheduledEmail {
+  id           Int       @id @default(autoincrement())
+  recipient    String
+  subject      String
+  body         String
+  scheduledAt  DateTime
+  sentAt       DateTime?
+  status       String    @default("PENDING")
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  campaignId Int
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+}

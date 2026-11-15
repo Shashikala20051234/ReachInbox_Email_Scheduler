@@ -516,9 +516,7 @@ Email Activity / Details
 
 ## Demo
 
-Demo video:
 
-**[Add Loom or Google Drive demo link here]**
 
 The demonstration covers:
 
@@ -533,15 +531,6 @@ The demonstration covers:
 
 ---
 
-## Hosted Application
-
-**Live Application:**
-[Add deployed frontend URL here]
-
-**Backend API:**
-[Add deployed backend URL here]
-
----
 
 ## Future Improvements
 
